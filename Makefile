@@ -1,27 +1,27 @@
 down: 
-	docker compose down -v --remove-orphans
+	docker compose exec down -v --remove-orphans
 up: 
-	docker compose up --build api frontend database adminer
+	docker compose exec  up --build api frontend database adminer
 
 it:
-	docker compose run -it api bash
+	docker compose exec  run -it api bash
 
 current:
-	docker exec -it cstrader-api-1 poetry run alembic -c backend/alembic.ini current
+	docker compose exec  -it cstrader poetry run alembic -c backend/alembic.ini current
 
 migrate:
-	docker exec -it cstrader-api-1 poetry run alembic -c backend/alembic.ini revision --autogenerate -m "${m}"
+	docker compose exec  -it cstrader poetry run alembic -c backend/alembic.ini revision --autogenerate -m "${m}"
 
 migrations:
-	docker exec -it cstrader-api-1 poetry run alembic -c backend/alembic.ini upgrade head
+	docker compose exec  -it cstrader poetry run alembic -c backend/alembic.ini upgrade head
 
 create_admin:
-	docker compose up --build initialize_admin -d
+	docker compose exec  up --build initialize_admin -d
 popular:
-	docker exec -it cstrader-api-1 poetry run python backend/src/seed.py
+	docker compose exec -it cstrader poetry run python backend/src/seed.py
 
 test:
-	docker exec -it cstrader-api-1 poetry run pytest
+	docker compose exec -it cstrader poetry run pytest
 
 install:
 	poetry install

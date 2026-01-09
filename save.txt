@@ -1,0 +1,109 @@
+Ahhh agora faz total sentido 😄 — é exatamente por isso que o Pod deu erro.
+
+O Kubernetes **precisa que ConfigMaps e Secrets existam antes** de você criar o Deployment ou StatefulSet que vai usá-los. Senão o Pod não consegue nem iniciar.
+
+---
+
+## ✅ Ordem correta para aplicar os ficheiros
+
+Vou te dar uma sequência **prática e segura**, baseada na sua estrutura (`backend`, `database`, `frontend`):
+
+---
+
+### 1️⃣ Backend
+
+1. **ConfigMap do backend**
+
+```bash
+kubectl apply -f backend/backend-configmap.yaml
+```
+
+2. **Secret do backend**
+
+```bash
+kubectl apply -f backend/backend-secret.yaml
+```
+
+3. **Headless Service (obrigatório para StatefulSet)**
+
+```bash
+kubectl apply -f backend/backend-service.yaml
+```
+
+4. **StatefulSet do backend**
+
+```bash
+kubectl apply -f backend/backend-statefulset.yaml
+```
+
+> ⚡ Assim o Pod consegue encontrar **todas as variáveis de ambiente** e o Service já existe.
+
+---
+
+### 2️⃣ Database (Postgres)
+
+1. ConfigMap do DB
+
+```bash
+kubectl apply -f database/db-configmap.yaml
+```
+
+2. Secret do DB
+
+```bash
+kubectl apply -f database/db-secret.yaml
+```
+
+3. Headless Service do DB
+
+```bash
+kubectl apply -f database/db-service.yaml
+```
+
+4. StatefulSet do DB
+
+```bash
+kubectl apply -f database/db-statefulset.yaml
+```
+
+---
+
+### 3️⃣ Frontend
+
+* Deployment (não precisa de ConfigMap/Secret se não tiver)
+
+```bash
+kubectl apply -f frontend/frontend-deployment.yaml
+```
+
+* Service
+
+```bash
+kubectl apply -f frontend/frontend-service.yaml
+```
+
+---
+
+### 4️⃣ Verificar tudo
+
+```bash
+kubectl get pods -w
+kubectl get svc
+kubectl get statefulset
+kubectl get deployment
+kubectl get pvc
+```
+
+* Aguarde até todos os Pods ficarem `Running`
+* `READY` deve ser `1/1` ou `2/2` dependendo do Deployment
+
+---
+
+💡 **Dica prática:**
+Sempre **aplique ConfigMaps e Secrets antes de qualquer Deployment/StatefulSet**, porque o Kubernetes **não cria o Pod se as variáveis referenciadas não existirem**.
+
+---
+
+Se quiser, posso escrever **um comando único “apply-all.sh”** que aplica tudo na ordem certa, para evitar esse tipo de problema no futuro.
+
+Quer que eu faça isso?

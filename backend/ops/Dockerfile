@@ -1,9 +1,9 @@
 # Usa uma imagem base Python slim (mais leve)
-FROM python:3.11-slim as builder
+FROM python:3.11-slim AS builder
 
 # Define o diretório de trabalho
 WORKDIR /app
-ENV PYTHONPATH=/app:$PYTHONPATH
+ENV PYTHONPATH=/app
 # Instala ferramentas essenciais (incluindo dependências do psycopg2)
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -36,7 +36,7 @@ RUN poetry install --no-root --only main
 
 # Para o seu MVP (simplificado):
 # 3. Copia o código da aplicação (assumindo que o código está em 'backend/')
-COPY backend/ /app/
+COPY backend/ /app/backend/
 
 # Define a porta de exposição (para documentação)
 EXPOSE 8000
