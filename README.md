@@ -1,4 +1,4 @@
-
+https://www.groundcover.com/blog/postgres-in-kubernetes-how-to-deploy-scale-and-manage
 # CSTrader API MVP: Marketplace de Skins
 
 Este projeto é um Minimum Viable Product (MVP) para um sistema de marketplace de skins (itens virtuais) estilo CS:GO, implementado em Python usando FastAPI e SQLAlchemy.
