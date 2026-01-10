@@ -3,9 +3,9 @@ kind: Service
 metadata:
   name: backend
 spec:
-  clusterIP: None
   selector:
     app: backend
   ports:
-  - port: 8000
-    targetPort: 8000
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
