@@ -45,8 +45,7 @@ Ao executar o script de start, o projeto será totalmente preparado: todas as im
 
 1. **Preparar e iniciar o Ambiente:**
 ```bash
-chmod +x scripts/*.sh
-./scripts/start.sh.sh
+chmod +x ./scripts/start.sh
 
 ```
 
