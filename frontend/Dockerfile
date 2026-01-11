@@ -1,11 +1,11 @@
 FROM nginx:1.27
 
-# Copy the built frontend files to the nginx html directory
+# Copy HTML
 COPY ./html /usr/share/nginx/html
-# Copy the nginx configuration files
+# Copy nginx conf
 COPY ./conf.d/ /etc/nginx/conf.d/
 
-EXPOSE 3000
+# Nginx deve escutar porta 80
+EXPOSE 80
 
-# Start nginx
 CMD ["nginx", "-g", "daemon off;"]
