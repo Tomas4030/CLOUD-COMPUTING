@@ -1,103 +1,92 @@
-https://www.groundcover.com/blog/postgres-in-kubernetes-how-to-deploy-scale-and-manage
-# CSTrader API MVP: Marketplace de Skins
+# 📂 Aplicação Fullstack K8s
 
-Este projeto é um Minimum Viable Product (MVP) para um sistema de marketplace de skins (itens virtuais) estilo CS:GO, implementado em Python usando FastAPI e SQLAlchemy.
+Esta é uma aplicação de três camadas (Frontend, Backend e Base de Dados) totalmente conteinerizada e orquestrada via Kubernetes. 
+O projeto demonstra o uso de volumes persistentes, segredos, configurações dinâmicas e exposição via Ingress.
 
-## 🚀 Funcionalidades Principais
+## 🏗️ Arquitetura do Projeto
 
-O sistema permite:
+A aplicação segue a estrutura clássica de 3 camadas:
 
-- **Autenticação de Utilizadores**: Registo e Login via JWT.
-- **Gestão de Carteira**: Depósito de fundos e histórico de transações.
-- **Inventário de Skins**: Consulta de itens que o utilizador possui.
-- **Marketplace**: Listagem, consulta e compra/venda de skins entre utilizadores.
-- **Administração**: Endpoints REST para criação e gestão de skins base (acessível apenas a utilizadores com a role admin).
+1. **Frontend**: Interface Web (Nginx) acessível via navegador.
+2. **Backend**: API (Node.js/Python) que processa a lógica de negócio.
+3. **Database**: Base de dados relacional (PostgreSQL) com persistência de dados.
+
+```text
+[ Utilizador ] ----> [ Ingress ] ----> [ Service: Frontend ]
+                                            |
+                                    [ Service: Backend ]
+                                            |
+                                    [ StatefulSet: DB ] <--- [ PVC/StorageClass ]
+
+```
+
+---
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Backend**: Python 3.11+
-- **Framework**: FastAPI
-- **Base de Dados**: PostgreSQL (via Docker)
-- **ORM**: SQLAlchemy 2.0+
-- **Gestão de Dependências**: Poetry
-- **Automatização**: Makefile
+* **Minikube**: Cluster local.
+* **Kubernetes**: Orquestração de containers.
+* **PostgreSQL**: Armazenamento de dados.
+* **Ingress Controller**: Gestão de acesso externo.
 
-## 📋 Pré-requisitos
+---
 
-Para rodar o projeto localmente, você precisará de:
+## 🚀 Como Executar
 
-- Python 3.11+
-- Poetry: Para gerir o ambiente virtual e as dependências do Python.  
-  Instalação (se necessário):  
-  
-  pip install poetry
+### 1. Pré-requisitos
 
-- Docker e Docker Compose
-- Make: Utilizado para simplificar os comandos de setup e inicialização.
+Certifique-se de ter instalado:
 
-## ⚙️ Configuração e Instalação (MVP Setup)
+* [Docker](https://docs.docker.com/get-docker/)
 
-O processo de instalação está simplificado num único comando \`make setup\` que automatiza a instalação das dependências, o setup da base de dados e a criação inicial de dados.
+### 2. Instalação e Inicialização
 
-### 1. Instalar Dependências Poetry
+Ao executar o script de start, o projeto será totalmente preparado: todas as imagens são construídas, os recursos aplicados no cluster e as portas necessárias expostas automaticamente. No final do processo, o terminal irá mostrar o link para aceder à aplicação. Basta abrir esse link no navegador para começar a usar a interface.
 
-poetry install
+1. **Preparar e iniciar o Ambiente:**
+```bash
+chmod +x scripts/*.sh
+./scripts/start.sh.sh
 
-
-### 2. Configurar Variáveis de Ambiente
-
-As configurações da base de dados e da API são geridas através do ficheiro \`.env\`.  
-Pode usar o \`.env.example\` como base.
-
-### 3. Executar o Setup Completo (Comando Único)
-
-Este comando:
-
-- Levanta os serviços Docker (incluindo o PostgreSQL)
-- Cria todas as tabelas na base de dados
-- Cria um utilizador Admin
-- Popula a base de dados com algumas skins iniciais
-
-make setup
-
-## ▶️ Como Rodar a API
-
-
-make up
-
-
-A API estará acessível em:
-
-- URL Base: [http://localhost:3000/](http://localhost:3000/)
-- Documentação Interativa (Swagger UI): [http://localhost:8000/docs](http://localhost:8000/docs])
-
-## 📚 Estrutura do Projeto
-```plaintext
-my_project/
-├── backend/
-│   ├── src/
-│   │   ├── database.py       # Serviço de persistência de dados (SQLAlchemy)
-│   │   ├── db_models.py      # Definição de tabelas da DB (ORM Models)
-│   │   ├── models.py         # Modelos Pydantic para validação de dados (Request/Response)
-│   │   ├── main.py           # Endpoints da API (FastAPI)
-│   │   └── settings.py       # Variáveis de ambiente e configurações
-│   └── tests/                # Testes unitários e de integração
-├── .env.example              # Exemplo de ficheiro de configuração de variáveis de ambiente
-├── docker-compose.yml        # Configuração dos serviços Docker (PostgreSQL)
-├── Makefile                  # Comandos de automação (setup, start, stop)
-└── pyproject.toml            # Configuração do projeto e dependências (Poetry)
 ```
 
-## 📌 Descrição das Pastas e Ficheiros
 
-- **backend/src/**: Contém toda a lógica da aplicação, incluindo a base de dados, modelos e endpoints da API.
-- **database.py**: Configuração do SQLAlchemy e criação da sessão de base de dados.
-- **db_models.py**: Definição das tabelas e relacionamentos da base de dados.
-- **models.py**: Modelos Pydantic usados para validação de dados em requests e responses.
-- **main.py**: Definição dos endpoints da API usando FastAPI.
-- **settings.py**: Variáveis de ambiente e configurações gerais do projeto.
-- **tests/**: Pasta destinada a testes unitários e de integração.
-- **.env**: ficheiro de variáveis de ambiente.
-- **docker-compose.yml**: Configuração dos serviços Docker necessários para o projeto (ex.: PostgreSQL).
-- **Makefile**: Comandos de automação para facilitar setup e execução do projeto.
-- **pyproject.toml**: Ficheiro de configuração do Poetry, incluindo dependências e metadados do projeto.
+## 🧪 Testes de Validação
+
+Para verificar se todos os componentes estão saudáveis, execute:
+
+```bash
+./scripts/test.sh
+
+```
+
+O script verificará o estado dos Pods, Services e a conectividade da base de dados.
+
+---
+
+## 🧹 Limpeza do Ambiente
+
+Para remover todos os recursos criados e parar o cluster:
+
+```bash
+./scripts/cleanup.sh
+
+```
+
+---
+
+## 📂 Estrutura do Repositório
+
+```text
+.
+├── infra/
+│   ├── backend/        # Deployment e Service da API
+│   ├── database/       # StatefulSet, PVC e Service do DB
+│   ├── frontend/       # Deployment e Service da Interface
+│   ├── ingress/        # Configuração do Ingress Controller
+│   └── config/         # ConfigMaps e Secrets
+├── scripts/            # Scripts de automação (.sh)
+└── README.md
+
+```
+
