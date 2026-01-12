@@ -43,12 +43,25 @@ Certifique-se de ter instalado:
 
 Ao executar o script de start, o projeto será totalmente preparado: todas as imagens são construídas, os recursos aplicados no cluster e as portas necessárias expostas automaticamente. No final do processo, o terminal irá mostrar o link para aceder à aplicação. Basta abrir esse link no navegador para começar a usar a interface.
 
-1. **Preparar e iniciar o Ambiente:**
+🚀 **Como Executar**  
+Para garantir que a aplicação é configurada corretamente, segue os passos abaixo no teu terminal.
+
+### 1. Permissões de Execução
+Antes de executar os scripts, é necessário conceder permissões para que o sistema os possa executar:"
+
 ```bash
 chmod +x ./scripts/start.sh
-
+chmod +x ./scripts/test.sh
+chmod +x ./scripts/cleanup.sh
 ```
 
+### 2. Iniciar a Implementação
+Agora, executa o script principal para preparar o cluster e instalar todos os componentes:
+
+```bash
+./scripts/start.sh
+
+```
 
 ## 🧪 Testes de Validação
 
