@@ -90,7 +90,15 @@ Para remover todos os recursos criados e parar o cluster:
 ## 📂 Estrutura do Repositório
 
 ```text
-.
+CStrader/
+├── backend/
+│   ├── src/
+│   │   ├── database.py
+│   │   ├── db_models.py
+│   │   ├── models.py
+│   │   ├── main.py
+│   │   └── settings.py
+│   └── tests/
 ├── infra/
 │   ├── backend/        # Deployment e Service da API
 │   ├── database/       # StatefulSet, PVC e Service do DB
@@ -98,7 +106,12 @@ Para remover todos os recursos criados e parar o cluster:
 │   ├── ingress/        # Configuração do Ingress Controller
 │   └── config/         # ConfigMaps e Secrets
 ├── scripts/            # Scripts de automação (.sh)
+├── .env.example
+├── docker-compose.yml
+├── Makefile
+├── pyproject.toml
 └── README.md
+
 
 ```
 
