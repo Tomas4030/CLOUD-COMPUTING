@@ -8,7 +8,7 @@ O projeto demonstra o uso de volumes persistentes, segredos, configurações din
 A aplicação segue a estrutura clássica de 3 camadas:
 
 1. **Frontend**: Interface Web (Nginx) acessível via navegador.
-2. **Backend**: API (Node.js/Python) que processa a lógica de negócio.
+2. **Backend**: API (Python) que processa a lógica de negócio.
 3. **Database**: Base de dados relacional (PostgreSQL) com persistência de dados.
 
 ```text
