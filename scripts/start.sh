@@ -12,6 +12,15 @@ log_info() { echo -e "${BLUE}ℹ️  $1${NC}"; }
 log_success() { echo -e "${GREEN}✅ $1${NC}"; }
 log_step() { echo -e "${CYAN}🚀 $1${NC}"; }
 
+clear   
+
+if minikube status !| grep -q "Running"; then
+    log_info "Minikube is already running."
+    ./scripts/cleanup.sh
+fi
+
+clear
+
 log_step "Starting Minikube..."
 minikube start --driver=docker 
 
@@ -44,14 +53,26 @@ kubectl wait --for=condition=Ready pod -l app=backend --timeout=120s
 log_info "Waiting for Frontend..."
 kubectl wait --for=condition=Ready pod -l app=frontend --timeout=120s
 
-log_step "Running Database Migrations..."
 BACKEND_POD=$(kubectl get pod -l app=backend -o jsonpath="{.items[0].metadata.name}")
-kubectl exec "$BACKEND_POD" -- poetry run alembic -c backend/alembic.ini upgrade head
+
+log_step "Running Database Migrations..."
+kubectl exec "$BACKEND_POD" -- poetry run alembic -c ./backend/alembic.ini upgrade head
 log_success "Database updated!"
+
+log_step "Creating admin user..."
+BACKEND_POD=$(kubectl get pod -l app=backend -o jsonpath="{.items[0].metadata.name}")
+kubectl exec "$BACKEND_POD" -- poetry run python backend/src/initialize_admin.py
+log_success "Admin user created!"
+
+log_step "Populating database with seed data..."
+kubectl exec "$BACKEND_POD" -- poetry run python ./backend/src/seed.py
+log_success "Database populated!"
 
 log_success "SYSTEM ONLINE"
 log_info "URL: http://localhost:8080"
+log_info "Admin Credentials - Email: admin@cstrader.com | Password: SuperSecureAdmin123!"
 
 kubectl port-forward svc/frontend 8080:80 >/dev/null 2>&1 &
+
 
 wait
