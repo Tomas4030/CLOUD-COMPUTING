@@ -47,7 +47,7 @@ Ao executar o script de start, o projeto será totalmente preparado: todas as im
 Para garantir que a aplicação é configurada corretamente, segue os passos abaixo no teu terminal.
 
 ### 1. Permissões de Execução
-Antes de executar os scripts, é necessário conceder permissões para que o sistema os possa executar:"
+Antes de executar os scripts, é necessário conceder permissões para que o sistema os possa executar:
 
 ```bash
 chmod +x ./scripts/start.sh
