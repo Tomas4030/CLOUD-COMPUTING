@@ -31,7 +31,7 @@ A aplicação segue a estrutura clássica de 3 camadas:
 
 ---
 
-## 🚀 Como Executar
+## 🚀 **Como Executar**  
 
 ### 1. Pré-requisitos
 
